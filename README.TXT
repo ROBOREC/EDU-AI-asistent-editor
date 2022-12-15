@@ -1,4 +1,4 @@
-EDU AI asistent
+# EDU AI asistent #
 VEŘEJNÁ BETA VERZE
 
 Prostředí pro návrh a provoz kurzů či procvičování - projekt AI asistent pro učitele a žáky: https://edu-ai.eu
@@ -6,7 +6,7 @@ Prostředí pro návrh a provoz kurzů či procvičování - projekt AI asistent
 EDU AI asistent usnadňuje práci učitelů - pomáhá s hledáním a tvorbou digitálních učebních materiálů, doučováním a podporou hybridní výuky. Žákům AI asistent pomáhá s pochopením látky a s přípravou na zkoušky. Usnadní jim využití existujících digitálníchvzdělávacích nástrojů a zpřístupní doučování dle potřeb jednotlivce.
 
 
-#Struktura#
+## Struktura ##
 
 * Roborec UI - webová aplikace editoru je psaná v Pythonu, servírují ji Gunicorn workeři 
 * DB - databáze (aktuálně z legacy důvodů MySQL)
@@ -19,7 +19,7 @@ EDU AI asistent usnadňuje práci učitelů - pomáhá s hledáním a tvorbou di
 Při zprávě (webchat nebo jiný vstupní kanál) přijde zpráva do RASA. Tam je aktuálně vyhodnocena se 100 % jistotou dle custom policy a spouští se akce běžící na RASA Actions. Tam je ověřen vstup od uživatele a na základě toho mu v odpovědi přijde text, obrázek, možnost odpovědi pomocí tlačítek nebo pauza. Pokud jde o pauzu - např 10s, je vytvořen asynchronní task v celery s eta např 10s. V okamžiku spuštění tohoto tasku se volá externí kanál RASA a uživateli je skrze vstupní kanál (webchat nebo jiný) vrácena odpověď dle scénaře v Roborec UI. Celé řešení je kontejnerizováno, běží dle konfiguračního souboru .env.
 
 
-#Instalace#
+## Instalace ##
 
 Prostředí pro spuštění aplikace v lokálním prostředí je třeba nainstalovat Docker + docker-compose, viz:
 https://docs.docker.com/get-docker 
@@ -67,12 +67,12 @@ Flower: 5555
 Adminer: 8082
 
 
-#Spuštění#
+## Spuštění ##
 Spuštění aplikace - ve složce (výchozí edu_light) příkaz “docker-compose up”
 Ukončení, ve složce projektu příkaz “docker-compose down”
 
 
-#Poznámky#
+## Poznámky ##
 Pro produkční prostředí je doporučeno oddělit jednotlivé části do microservices s nastavením odpovídajícího výkonu + škálování jednotlivých podů. 
 
 Vývoj byl realizován pod Linuxem, vzhledem ke kontejnerům nelze garantovat běh na platformách, které plně nepodporují Docker apod - např. MacOS, Windows.
