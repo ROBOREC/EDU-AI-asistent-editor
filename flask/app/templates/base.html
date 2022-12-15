@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EDU</title>
+    <link rel="icon" href="{{PROJECT_URL}}{{url_for('static',filename='media/img/favicon.png')}}" type="image/png">
+    <!-- <link rel="stylesheet" href="https://daemonite.github.io/material/css/material.min.css"> -->
+    <link rel="stylesheet"
+        href="{{PROJECT_URL}}{{url_for('static',filename='css/bootstrap-material-datetimepicker.css') }}">
+    <link rel="stylesheet" href="{{PROJECT_URL}}{{url_for('static',filename='css/bundle.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.2.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="{{url_for('static',filename='vendor/enjoyhint/enjoyhint.css') }}"> -->
+    <link rel="stylesheet" href="{{PROJECT_URL}}{{url_for('static',filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{PROJECT_URL}}{{url_for('static',filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+{% block content %}
+
+{% endblock %}
+<script>var PROJECT_URL = "{{PROJECT_URL}}"; var LIBRARY_URL = "{{LIBRARY_URL}}";</script>
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/bundle.js') }}"></script>
+<!-- <script src="{{url_for('static',filename='vendor/enjoyhint/enjoyhint.min.js')}}"></script> -->
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/app.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/jquery-ui.min.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/material.min.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/moment-with-locales.min.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static',filename='js/bootstrap-material-datetimepicker.min.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        //document.addEventListener('contextmenu', event => event.preventDefault());
+        setInterval(function () {
+            if (navigator.onLine) {
+                $("#noInternetModal").modal("hide");
+            } else {
+                $("#noInternetModal").modal("hide");
+            }
+        }, 5000);
+    });
+</script>
+{% block scripts %}
+{% endblock %}
+
+</html>

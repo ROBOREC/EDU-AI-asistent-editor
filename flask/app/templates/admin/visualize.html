@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body style="overflow:scroll !important">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h4 class="mt-4">Vizualizace lekce {{lecture.name}}</h4>
+				<h6>Kurz {{course.name}}</h6>
+			</div>
+			<ul style="list-style: decimal;">
+				{% for step in lecture.steps|sort(attribute='position') %}
+					<li class="lvl1">
+						{% if step.response_type == "pause"%}
+							{% if step.description in ["pause", "run_at"] %}
+								{{step.description|pause2text}}
+								{{step.text}}
+								{{step.text2|type2text}}
+							{% else %}
+								{{step.text}}
+								{{step.text2|type2text}}
+								{{step.description|pause2text}}
+							{% endif %}
+							<span class="badge badge-{{step.response_type|type2class}}">{{step.response_type|type2text}}</span>
+						{% else %}
+							{{step.description}}
+							{% if step.description == ""%}
+								{% if step.step_type == "image" %}
+									<img style="max-height:100px;width:auto" src="{{PROJECT_URL}}/static/uploads/{{step.text}}">
+								{% else %}
+									{{step.text}}
+								{% endif %}
+							{% endif%}
+							{% if step.response_type != "information"%}<span class="badge badge-{{step.response_type|type2class}}">{{step.response_type|type2text}}</span>{%endif%}{% if step.response_type != "question" and step.response_type != "pause"%}<span class="badge badge-success">{{step.step_type|type2text}}</span>{% endif %}
+						{%endif%}
+						<ul>
+						{% for answer in step.answers|selectattr('parent_id', 'equalto', 0)|sort(attribute='position') %}
+							<li class="lvl2">
+								{{answer.text if answer.text != "" else answer.text2match}}
+								<ul>
+									{% for subanswer in step.answers|selectattr('parent_id', 'equalto', answer.id)|list %}
+										<li class="lvl3">
+											{% if subanswer.answer_type == "image" %}
+												<img style="max-height:100px;width:auto" src="{{PROJECT_URL}}/static/uploads/{{subanswer.text2}}">
+											{% else %}
+												{{subanswer.text2}}
+											{% endif %}
+											<span style="display:none" class="badge badge-primary">{{subanswer.answer_type|type2text}}</span>
+										</li>
+									{% endfor %}
+									<li class="lvl3" style="padding-bottom:5px;">
+										->
+										{{answer.following_action_id|anything2name(answer.following_action)}}
+										<span class="badge badge-primary">{{answer.following_action|type2text}}</span>
+									</li>
+								</ul>
+							</li>
+						{% endfor %}
+						</ul>
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>
+</body>
+<style>
+	.lvl1 {
+
+	}
+
+	.lvl2 {
+
+	}
+
+	.lvl3 {
+		list-style: none;
+	}
+	html {
+  	overflow-x: hidden;
+  	overflow-y: auto;
+	}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+});
+</script>
+{% endblock %}

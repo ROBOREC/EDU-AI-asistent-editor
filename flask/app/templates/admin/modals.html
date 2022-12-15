@@ -1,0 +1,731 @@
+<div class="modal fade show" id="noInternetModal" tabindex="-1" role="dialog" aria-modal="true" data-backdrop="static">
+	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row mb-5">
+					<div class="col-md-6 offset-3">
+						<img src="{{url_for('static', filename='media/svg/undraw_warning_cyit.svg', _external=True, _scheme='https')}}"
+							class="img-fluid" alt="image">
+					</div>
+				</div>
+				<p style="font-size:22px;font-weight:400" class="lead text-center"><span
+						class="text-danger">Nejste</span> připojeni k internetu...</p>
+			</div>
+			<div class="modal-footer justify-content-center">
+				<a href="{{url_for('admin.logout', subdomain=session['subdomain'])}}" class="btn btn-link">Odhlásit
+					se</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="newCourseModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header" style="justify-content: normal;">
+				<h5 class="modal-title" style="width: 100%;padding-right: 10px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#newcourse" role="tab"
+							aria-controls="newcourse" aria-selected="true">Nový kurz</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#import" role="tab" aria-controls="import"
+							aria-selected="false">Import ze souboru</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#importcoursefromlibrary" role="tab"
+							aria-controls="import" aria-selected="false">Import z knihovny</a>
+					</li>
+				</ul>
+				<div class="tab-content" style="padding-top:10px;">
+					<div class="tab-pane show active" id="newcourse" role="tabpanel">
+						<form>
+							<div class="form-group">
+								<label for="course_name" class="col-form-label">Název</label>
+								<input type="text" class="form-control" id="course_name"
+									value="{{course.name if course is defined}}">
+							</div>
+							<div class="form-group">
+								<label for="course_description" class="col-form-label">Popis</label>
+								<textarea class="form-control" id="course_description"
+									value="{{course.description if course is defined}}"></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane" id="import" role="tabpanel">
+						<div class="form-group">
+							<label class="form-label" for="json_export">Vyberte soubor json</label>
+							<input type="file" class="form-control" id="json_export" />
+						</div>
+					</div>
+					<div class="tab-pane" id="importcoursefromlibrary" role="tabpanel">
+						<div class="form-group courses2import"></div>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button id="course-save" type="button" class="btn btn-primary">Uložit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat kurz</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tento kurz?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="course-delete" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="newLectureModal" tabindex="-1" role="dialog" aria-labelledby="newLectureModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header" style="justify-content: normal;">
+				<h5 class="modal-title" style="width: 100%;padding-right: 10px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#newlecture" role="tab"
+							aria-controls="newlecture" aria-selected="true">Nová lekce</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#importlecture" role="tab" aria-controls="import"
+							aria-selected="false">Import ze souboru</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#importlecturefromlibrary" role="tab"
+							aria-controls="import" aria-selected="false">Import z knihovny</a>
+					</li>
+				</ul>
+				<div class="tab-content" style="padding-top:10px;">
+					<div class="tab-pane show active" id="newlecture" role="tabpanel">
+						<form>
+							<div class="form-group">
+								<label for="lecture_name" class="col-form-label">Název</label>
+								<input type="text" class="form-control" id="lecture_name"
+									value="{{lecture.name if lecture is defined}}">
+							</div>
+							<div class="form-group">
+								<label for="lecture_description" class="col-form-label">Popis</label>
+								<textarea class="form-control" id="lecture_description"
+									value="{{lecture.description if lecture is defined}}"></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane" id="importlecture" role="tabpanel">
+						<div class="form-group">
+							<label class="form-label" for="json_export_lecture">Vyberte soubor json</label>
+							<input type="file" class="form-control" id="json_export_lecture" />
+						</div>
+					</div>
+					<div class="tab-pane" id="importlecturefromlibrary" role="tabpanel">
+						<div class="form-group lectures2import"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button id="lecture-save" type="button" class="btn btn-primary">Uložit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deleteLectureModal" tabindex="-1" role="dialog" aria-labelledby="deleteLectureModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat lekci</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tuto lekci?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="lecture-delete" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="newStepModal" tabindex="-1" role="dialog" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+					<span>Nový krok</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Vyberte typ kroku: <BR>
+				<div class="route-steps">
+					<a class="step" data-toggle="modal" data-target="#newInformationModal">Informace</a>
+					<a class="step" data-toggle="modal" data-target="#newQuestionModal">Otázka</a>
+					<a class="step" data-toggle="modal" data-target="#newPauseModal">Časovač</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="newInformationModal" tabindex="-1" role="dialog" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header" style="justify-content: normal;">
+				<h5 class="modal-title" style="width: 100%;padding-right: 10px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+					<input type="text" class="form-control step_description" id="step_description" value="">
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="infoitem">
+						<div style="display:none">
+							<div class="form-group col-md-6">
+								<label for="step_description" class="col-form-label">Popis</label>
+								<input type="text" class="form-control step_description" id="step_description" value="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-9">
+								<label for="city" class="col-form-label">Typ kroku</label>
+								<div class="input-group">
+									<select id="step_type" class="form-control step_type">
+										<option value="text">Text</option>
+										<option value="image">Obrázek</option>
+										<option value="video">Video</option>
+										<option value="link">Odkaz</option>
+										<option value="pause">Pauza</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group col-md-3" style="display:flex;justify-content: start;">
+								<button class="btn btn-light mr-2 duplicate-infoitem"
+									style="border-color: #e6e6e6;align-self: flex-end;margin-left: -5px;"
+									data-answer_id=""><i class="fa fa-clone"></i></button>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="step_text" class="col-form-label">Zobrazit</label>
+								<input type="text" class="form-control step_text" id="step_text" value="">
+							</div>
+							<div class="form-group col-md-12 dropzonewrapper"
+								style="display:flex;justify-content: end;display:none">
+								<span id="dropzoneodd">
+									<div class="dropzone">
+										<div class="fallback">
+											<input name="souborp[]" type="file" multiple>
+										</div>
+									</div>
+								</span>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer" style="justify-content:space-between">
+				<button type="button" class="btn btn-outline-light add-infoitems"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-plus-circle">
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="12" y1="8" x2="12" y2="16"></line>
+						<line x1="8" y1="12" x2="16" y2="12"></line>
+					</svg></button>
+				<button id="information-save" type="button" class="btn btn-primary">Uložit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deleteInformationModal" tabindex="-1" role="dialog"
+	aria-labelledby="deleteInformationModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat informaci</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tuto informaci?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="information-delete" data-step_id="" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="newQuestionModal" tabindex="-1" role="dialog" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header" style="justify-content: normal;">
+				<h5 class="modal-title" style="width: 100%;padding-right: 10px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+					<input type="text" class="form-control" id="question_description" value="">
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label for="question_text" class="col-form-label">Text před obrázkem</label>
+							<textarea class="form-control" id="question_text3" value=""></textarea>
+						</div>
+						<div class="form-group" style="display:none">
+							<label for="question_text2" class="col-form-label">Obrázek otázky</label>
+							<input type="text" class="form-control question_text2" id="question_text2" value="">
+						</div>
+						<div class="form-group col-md-12 dropzonewrapper" style="display:flex;justify-content: end;">
+							<span id="dropzonequestion">
+								<div class="dropzone">
+									<div class="fallback">
+										<input name="souborp[]" type="file" multiple>
+									</div>
+								</div>
+							</span>
+						</div>
+						<div class="form-group col-md-12">
+							<label for="question_text" class="col-form-label">Text otázky</label>
+							<textarea class="form-control" id="question_text" value=""></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer" style="justify-content:space-between">
+				<div style="display: flex;">
+					<label style="margin-right: 10px;margin-top: 1px;">Výběr z nabídky</label>
+					<div class="form-item custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input" id="question_free_input">
+						<label class="custom-control-label" for="question_free_input">Volná odpověď</label>
+					</div>
+				</div>
+				<button id="question-save" type="button" class="btn btn-primary">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deleteQuestionModal" tabindex="-1" role="dialog" aria-labelledby="deleteQuestionModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat otázku</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tuto otázku?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="question-delete" data-question_id="" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="newAnswerModal" tabindex="-1" role="dialog" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header" style="justify-content: normal;">
+				<h5 class="modal-title" style="width: 100%;padding-right: 10px;">
+					<div style="display:none !important">
+						<svg style="display:none !important;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 mr-2">
+							<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+						</svg>
+						<input style="display:none !important;" type="text" class="form-control" id="answer_text"
+							value="">
+					</div>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="answer_text2match" class="col-form-label">Pokud student odpoví:</label>
+						<input type="text" class="form-control" id="answer_text2match" value="" maxlength="23">
+					</div>
+					<hr style="margin-top: 20px;margin-bottom: 20px;">
+					<div class="answeritems">
+						<div class="answeritem">
+							<div class="row">
+								<div class="form-group col-md-9">
+									<label for="step_description" class="col-form-label">Popis</label>
+									<input type="text" class="form-control answer_description" id="answer_description"
+										value="">
+								</div>
+								<div class="form-group col-md-3" style="display:flex;justify-content: start;">
+									<button class="btn btn-light mr-2 duplicate-answeritem"
+										style="border-color: #e6e6e6;align-self: flex-end;margin-left: -5px;"><i
+											class="fa fa-clone"></i></button>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="city" class="col-form-label">Typ odpovědi</label>
+									<div class="input-group">
+										<select id="answer_type" class="form-control answer_type">
+											<option value="text">Text</option>
+											<option value="image">Obrázek</option>
+											<option value="video">Video</option>
+											<option value="link">Odkaz</option>
+											<option value="pause">Odkaz</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<label for="answer_text2" class="col-form-label">Zobrazit</label>
+									<input type="text" class="form-control answer_text2" id="answer_text2" value="">
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr style="margin-top: 5px;margin-bottom: 10px;">
+					<div class="form-group">
+						<label for="answer_following_action" class="col-form-label">Potom pokračuje</label>
+						<select class="form-control" id="answer_following_action">
+							<option value="again">Znovu tato otázka</option>
+							<option value="next">Další krok lekce </option>
+							<option value="lecture">Spustit jinou lekci </option>
+							<option value="step">Jiný krok této lekce</option>
+							<option value="course">Jiný kurz</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="answer_following_action_id" class="col-form-label">Upřesnění:</label>
+						<select class="form-control" id="answer_following_action_id"></select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer" style="justify-content:space-between">
+				<button type="button" class="btn btn-outline-light add-answeritems"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-plus-circle">
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="12" y1="8" x2="12" y2="16"></line>
+						<line x1="8" y1="12" x2="16" y2="12"></line>
+					</svg>
+				</button>
+				<div class="form-item custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" id="answer_correct">
+					<label class="custom-control-label" for="answer_correct">Správná odpověď</label>
+				</div>
+				<button id="answer-save" data-answer_id="" type="button" class="btn btn-primary">Uložit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deleteAnswerModal" tabindex="-1" role="dialog" aria-labelledby="deleteAnswerModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat odpověď</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tuto odpověď?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="answer-delete" data-answer_id="" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="newPauseModal" tabindex="-1" role="dialog" aria-modal="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+						stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+						class="feather feather-edit-2 mr-2">
+						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+					</svg>
+					<span>Nová pauza</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="pause_type" class="col-form-label">Typ časovače</label>
+						<select class="form-control" id="pause_type" name="pause_type">
+							<option value="pause">Pauza</option>
+							<option value="after_lection_before">Spustit po předchozí lekci</option>
+							<option value="after_lection_start">Spustit po zahájení kurzu</option>
+							<option value="run_at">Spustit konkrétní den</option>
+						</select>
+					</div>
+					<div class="form-row intervalpicking">
+						<div class="form-group col-md-6">
+							<label for="pause_text" class="col-form-label">Čekej</label>
+							<input type="number" class="form-control" id="pause_text" value="">
+						</div>
+						<div class="form-group col-md-6">
+							<label for="pause_text2" class="col-form-label">Jednotka</label>
+							<select class="form-control" id="pause_text2">
+								<option value="now">ihned</option>
+								<option value="seconds">vteřin</option>
+								<option value="minutes">minut</option>
+								<option value="hours">hodin</option>
+								<option value="days">dnů</option>
+								<option value="still">stále</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group datepicking">
+						<label for="pause_date" class="col-form-label">Vyberte datum a čas</label>
+						<input type="text" class="form-control" name="pause_date" id="pause_date">
+						<!-- <i class="far fa-calendar-alt"></i> -->
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="pause-save" type="button" class="btn btn-primary">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deletePauseModal" tabindex="-1" role="dialog" aria-labelledby="deletePauseModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
+						viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+						style="width: 25px;height: 25px;">
+						<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#fff"
+							stroke="none">
+							<path d="M1012 4605 c-64 -20 -117 -61 -154 -118 l-33 -52 -3 -1755 c-2 -1618
+                      -1 -1758 14 -1799 23 -60 79 -119 139 -147 l50 -24 1368 0 1368 0 44 30 c43
+                      30 102 94 124 137 8 16 11 367 11 1295 l0 1273 -578 578 c-448 448 -585 579
+                      -612 587 -22 6 -339 10 -865 9 -667 0 -838 -3 -873 -14z m1548 -707 c0 -388 2
+                      -438 17 -482 24 -67 99 -147 165 -177 53 -24 54 -24 499 -27 l446 -3 6 -277
+                      c4 -152 7 -650 7 -1105 0 -706 -2 -831 -14 -843 -13 -12 -194 -14 -1293 -12
+                      l-1278 3 -3 1678 -2 1677 725 0 725 0 0 -432z m613 -396 c-164 -1 -303 0 -310
+                      3 -10 3 -13 74 -13 312 l0 308 310 -310 310 -310 -297 -3z"></path>
+							<path d="M1452 3258 l3 -143 468 -3 467 -2 0 145 0 145 -470 0 -471 0 3 -142z"></path>
+							<path d="M1457 2803 c-4 -3 -7 -69 -7 -145 l0 -138 905 0 905 0 0 145 0 145
+                      -898 0 c-494 0 -902 -3 -905 -7z"></path>
+							<path d="M1452 2068 l3 -143 903 -3 902 -2 0 145 0 145 -905 0 -906 0 3 -142z"></path>
+							<path d="M1955 1620 l-500 -5 -3 -142 -3 -143 901 0 900 0 0 150 0 150 -397
+                      -2 c-219 -2 -623 -5 -898 -8z"></path>
+						</g>
+					</svg>
+					<span>Smazat pauzu</span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<i class="fa fa-close"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				Opravdu chcete smazat tuto pauzu?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-dismiss="modal">Zrušit</button>
+				<button id="pause-delete" data-step_id="" type="button" class="btn btn-danger">Potvrdit</button>
+			</div>
+		</div>
+	</div>
+</div>

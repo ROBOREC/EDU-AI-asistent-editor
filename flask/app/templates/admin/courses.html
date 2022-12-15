@@ -1,0 +1,462 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"></script>
+<link rel="stylesheet" href="{{PROJECT_URL}}{{url_for('static', filename='dropzone/dropzone3.css')}}">
+{% include 'admin/modals.html' %}
+
+<body>
+	<div class="layout">
+		<div class="content">
+			{% include 'admin/nav.html' %}
+			<div class="sidebar-group">
+				<div id="courses" class="sidebar active">
+					<header>
+						<div class="d-flex align-items-center">
+							{% if request.endpoint == "admin.course_detail" %}
+								<a class="btn btn-outline-light" href="javascript:void(0);" id="back2courses" data-course_id="{{course.id}}">
+									<i class="fas fa-arrow-left"></i>
+								</a>
+							{% endif %}
+							<button class="btn btn-outline-light mobile-navigation-button mr-3 d-xl-none d-inline">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+							</button>
+							{% if request.endpoint == "admin.course_detail" %}
+								<span class="sidebar-title">{{course.name}}</span>
+							{% else %}
+								<span class="sidebar-title">Kurzy</span>
+							{% endif %}
+						</div>
+
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								{% if request.endpoint == "admin.course_detail" %}
+									<a class="btn btn-outline-light" data-toggle="modal" data-target="#newLectureModal">
+										<i data-feather="plus-circle"></i>
+									</a>
+								{% else %}
+									<a class="btn btn-outline-light" data-toggle="modal" data-target="#newCourseModal">
+										<i data-feather="plus-circle"></i>
+									</a>
+								{% endif %}
+							</li>
+						</ul>
+					</header>
+					<form>
+						<input type="text" class="form-control" id="search" placeholder="{% if request.endpoint == 'admin.course_detail' %}Hledat v lekcích kurzu{% else %}Hledat v kurzech{% endif %}">
+					</form>
+					<div class="sidebar-body scroller">
+						<ul class="list-group list-group-flush" id="loader">
+							{% if request.endpoint == "admin.course_detail" %}
+								{% for lecture in lectures %}
+									<li data-lecture_id="{{lecture.id}}" class="list-group-item {% if lecture.id|string == request.args.get('lecture_id') %}open-chat{%endif%}">
+										<div class="users-list-body">
+											<div>
+												<h5>{{lecture.name}}</h5>
+												<p>{{lecture.description}}</p>
+											</div>
+											<div class="users-list-action">
+												<div class="new-message-count">{{lecture.steps_count}}</div>
+												<small class="text-muted">{{lecture.last_edited.strftime("%d.%m.%Y")}}</small>
+												<div class="action-toggle">
+													<div class="dropdown">
+														<a data-toggle="dropdown">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right">
+															<a class="dropdown-item">Otevřít</a>
+															<a href="javascript:void(0);" class="dropdown-item edit-lecture" data-lecture_id="{{lecture.id}}" data-toggle="modal" data-target="#newLectureModal">Upravit</a>
+															<a href="javascript:void(0);" class="dropdown-item move-lecture-up" data-lecture_id="{{lecture.id}}">Posunout ↑</a>
+															<a href="javascript:void(0);" class="dropdown-item move-lecture-down" data-lecture_id="{{lecture.id}}">Posunout ↓</a>
+															<a href="javascript:void(0);" class="dropdown-item duplicate-lecture" data-lecture_id="{{lecture.id}}">Duplikovat</a>
+															<a href="javascript:void(0);" class="dropdown-item export-lecture" data-lecture_id="{{lecture.id}}">Exportovat</a>
+															<a href="javascript:void(0);" class="dropdown-item visualize-lecture" data-lecture_id="{{lecture.id}}">Vizualizace</a>
+															<div class="dropdown-divider"></div>
+															<a href="javascript:void(0);" class="dropdown-item text-danger" data-lecture_id="{{lecture.id}}" data-toggle="modal" data-target="#deleteLectureModal">Smazat</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								{% endfor %}
+							{% else %}
+								<!-- {% for course2show in courses %}
+									<li data-course_id="{{course2show.id}}" class="list-group-item {% if course2show.id == course.id %}open-chat{%endif%}">
+										<div class="users-list-body">
+											<div>
+												<h5>{{course2show.name}}</h5>
+												<p>{{course2show.description}}</p>
+											</div>
+											<div class="users-list-action">
+												<div class="action-toggle">
+													<div class="dropdown">
+														<a data-toggle="dropdown">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right">
+															<a class="dropdown-item">Otevřít</a>
+															<a href="javascript:void(0);" class="dropdown-item edit-course" data-course_id="{{course2show.id}}" data-toggle="modal" data-target="#newCourseModal">Upravit</a>
+															<div class="dropdown-divider"></div>
+															<a href="javascript:void(0);" class="dropdown-item text-danger" data-course_id="{{course2show.id}}" data-toggle="modal" data-target="#deleteCourseModal">Smazat</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								{% endfor %} -->
+							{% endif %}
+
+						</ul>
+						<div id="loadmore" style="overflow:hidden"></div>
+						<div class="justify-content-center" style="display:flex" id="loading">
+							<div class="spinner-border" role="status"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="chat">
+				{% if lecture2show is defined %}
+					<div class="chat-header">
+						<div class="chat-header-user">
+							<div>
+								<h5>{{lecture2show.name}}</h5>
+								<p>{{lecture2show.description}}</p>
+							</div>
+						</div>
+						<div class="chat-header-action">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="btn btn-outline-light new-question" data-toggle="modal" data-lecture_id="{{lecture2show.id}}" data-target="#newStepModal">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+									</a>
+								</li>
+								{% if request.endpoint == "admin.course_detail" and request.args.get("lecture_id") %}
+									<a class="btn btn-outline-light" href="javascript:void(0);" id="back2lectures" data-course_id="{{course.id}}">
+										<i class="fas fa-arrow-left"></i>
+									</a>
+								{% endif %}
+								<li class="list-inline-item d-xl-none d-inline">
+									<a href="javascript:void(0);" class="btn btn-outline-light mobile-navigation-button">
+										<i data-feather="menu"></i>
+									</a>
+								</li>
+								<li class="list-inline-item">
+									<a href="javascript:void(0);" class="btn btn-outline-light" data-toggle="dropdown">
+										<i data-feather="more-horizontal"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="javascript:void(0);" class="dropdown-item new-question" data-lecture_id="{{lecture2show.id}}" data-toggle="modal" data-target="#newStepModal">Přidat krok</a>
+										<a href="" class="dropdown-item edit-lecture" data-lecture_id="{{lecture2show.id}}" data-toggle="modal" data-target="#newLectureModal">Upravit</a>
+										<a href="javascript:void(0);" class="dropdown-item move-lecture-up" data-lecture_id="{{lecture2show.id}}">Posunout ↑</a>
+										<a href="javascript:void(0);" class="dropdown-item move-lecture-down" data-lecture_id="{{lecture2show.id}}">Posunout ↓</a>
+										<a href="javascript:void(0);" class="dropdown-item duplicate-lecture" data-lecture_id="{{lecture2show.id}}">Duplikovat</a>
+										<a href="javascript:void(0);" class="dropdown-item export-lecture" data-lecture_id="{{lecture2show.id}}">Exportovat</a>
+										<a href="javascript:void(0);" class="dropdown-item visualize-lecture" data-lecture_id="{{lecture2show.id}}">Vizualizace</a>
+										<div class="dropdown-divider"></div>
+										<a href="javascript:void(0);" class="dropdown-item text-danger" data-lecture_id="{{lecture2show.id}}" data-toggle="modal" data-target="#deleteLectureModal">Smazat</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="chat-body">
+						{% for step in lecture2show.steps|sort(attribute='position') %}
+							{% if step.parent_id == 0 %}
+								<div class="lecture-step-wrapper">
+									<div class="lecture-step">
+										<h5 class="lecture-step-title">
+											{% if step.response_type == "pause"%}
+												{% if step.description in ["pause", "run_at"] %}
+													{{step.description|pause2text}}
+													{{step.text}}
+													{{step.text2|type2text}}
+												{% else %}
+													{{step.text}}
+													{{step.text2|type2text}}
+													{{step.description|pause2text}}
+												{% endif %}
+												<span class="badge badge-{{step.response_type|type2class}}">{{step.response_type|type2text}}</span>
+											{% else %}
+												{{step.description}}
+												{% if step.description == ""%}
+													{{step.text}}
+												{% endif%}
+												<span class="badge badge-{{step.response_type|type2class}}">{{step.response_type|type2text}}</span>{% if step.response_type != "question" and step.response_type != "pause"%}<span class="badge badge-success">{{step.step_type|type2text}}</span>{% endif %}{% if step.response_type == "question" and not step.free_input %}<span class="badge badge-primary">{{step.answers|selectattr('parent_id', 'equalto', 0)|list|length}} odpovědi</span>{% endif %}
+											{%endif%}
+										</h5>
+										<div class="lecture-step-filler"></div>
+
+										{% if step.response_type == "question" and not step.free_input %}
+											<button class="btn btn-light mr-2 collapse-step collapsed-step"><i class="fa fa-chevron-up"></i></button>
+										{% endif %}
+										<button class="btn btn-warning mr-2 edit-step" data-lecture_id="{{step.lecture_id}}" data-step_id="{{step.id}}" type="button" data-toggle="modal" data-target="#new{{step.response_type|title}}Modal" title="" data-original-title="Edit"><i class="fa fa-edit"></i></button>
+										<button class="btn btn-light mr-2 duplicate-step" data-step_id="{{step.id}}"><i class="fa fa-clone"></i></button>
+										<button class="btn btn-danger delete-step" data-step_id="{{step.id}}" type="button" data-toggle="modal" data-target="#delete{{step.response_type|title}}Modal" title="" data-original-title="Delete"><i class="fa fa-trash"></i></button>
+									</div>
+									{% for answer in step.answers|sort(attribute='position') %}
+										{% if answer.parent_id == 0 %}
+											<div class="lecture-step-answer">
+												<h5 class="lecture-step-title">{{answer.text if answer.text != "" and step.free_input else answer.text2match}} <span class="badge badge-danger">1+{{step.answers|selectattr('parent_id', 'equalto', answer.id)|list|length }} kroků</span><span class="badge badge-primary">{{answer.following_action|type2text}}</span></h5>
+												<div class="lecture-step-filler"></div>
+												<button class="btn btn-warning mr-2 edit-answer" data-answer_id="{{answer.id}}" data-step_id="{{step.id}}" type="button" data-toggle="modal" data-target="#newAnswerModal" title="" data-original-title="Edit"><i class="fa fa-edit"></i></button>
+												<button class="btn btn-danger delete-answer" data-answer_id="{{answer.id}}" type="button" data-toggle="modal" data-target="#deleteAnswerModal" title="" data-original-title="Delete"><i class="fa fa-trash"></i></button>
+											</div>
+										{% endif %}
+									{% endfor %}
+
+
+									{% if step.response_type == "question" %}
+										<div class="lecture-step-answer answer-plus">
+											<a class="btn btn-outline-light edit-answer" data-toggle="modal" data-step_id="{{step.id}}" data-target="#newAnswerModal">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+											</a>
+										</div>
+									{% endif %}
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% else %}
+					<div class="chat-body">
+						<div class="no-message-container">
+							<div class="row my-5">
+								<div class="col-md-4 offset-4">
+									<img src="{{PROJECT_URL}}{{url_for('static', filename='media/svg/undraw_empty_xct9.svg')}}" class="img-fluid" alt="image">
+								</div>
+							</div>
+							<div class="row my-5">
+								<div class="col-md-4 offset-md-4">
+									<p class="lead">Vyberte si z bočního menu</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+      		</div>
+		</div>
+	</div>
+</body>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{PROJECT_URL}}{{url_for('static', filename='dropzone/dropzone2.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static', filename='dropzone/jquery-ui.min.js')}}"></script>
+<script src="{{PROJECT_URL}}{{url_for('static', filename='dropzone/jquery.ui.touch-punch.min.js')}}"></script>
+<script>
+Dropzone.autoDiscover = false;
+$(document).ready(function() {
+
+	function scrollIntoViewTillId(id2find) {
+		var item2find = $("#loader li.list-group-item[data-"+(($("#back2courses").length>0)?"lecture_id":"course_id")+"='"+id2find+"']");
+		if (item2find.length < 1) {
+			$('.sidebar-body').first().scrollTop($('.sidebar-body').first().prop("scrollHeight"));
+		} else {
+			item2find[0].scrollIntoView({block: 'center'});
+		}
+	}
+
+
+	var counter = 1;
+	var target = 'courses';
+	var loadmore = $('#loadmore')[0];
+
+	function loadConversations(search="", new_search=0) {
+
+		var course_id = $("#back2courses").first().attr("data-course_id");
+		var courses_lectures = (($("#back2courses").length>0 && course_id)?"lectures":"courses");
+
+		if (new_search) {
+			counter = 1;
+			intersectionObserver.unobserve(loadmore);
+			$('#loader').empty();
+			$('#courses-visible').text(0);
+		}
+
+		$("#loading").show();
+		$.ajax({
+			url: ((courses_lectures=="courses")?"/admin/ajax/courses?p="+counter+"&s="+search:"/admin/ajax/lectures?course_id="+course_id+"&p="+counter+"&s="+search),
+			type: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				var data = ((courses_lectures == "courses")?response.courses:response.lectures);
+				if (!data.length) {
+					$("#loading").hide();
+					intersectionObserver.unobserve(loadmore);
+				} else if (data.length<20) {
+					intersectionObserver.unobserve(loadmore);
+				} else if (data.length==20) {
+					intersectionObserver.observe(loadmore);
+					counter += 1;
+				}
+
+				$("#courses-visible").text($("#loader li:visible").length+data.length);
+				$("#courses-total").text(response.conversations_count);
+
+				if (courses_lectures == "courses") {
+					for (var i = 0; i < data.length; i++) {
+						$("#loader").append(`
+						<li data-course_id="`+data[i]["course_id"]+`" class="list-group-item `+((course_id == data[i]["course_id"])?"open-chat":"")+`">
+							<div class="users-list-body">
+								<div>
+									<h5></h5>
+									<p></p>
+								</div>
+								<div class="action-toggle">
+									<div class="dropdown">
+										<a data-toggle="dropdown">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a class="dropdown-item">Otevřít</a>
+											<a href="javascript:void(0);" class="dropdown-item edit-course" data-course_id="`+data[i]["course_id"]+`" data-toggle="modal" data-target="#newCourseModal">Upravit</a>
+											<a href="javascript:void(0);" class="dropdown-item duplicate-course" data-course_id="`+data[i]["course_id"]+`" data-toggle="modal" data-target="#newCourseModal">Duplikovat</a>
+											<a href="javascript:void(0);" class="dropdown-item export-course" data-course_id="`+data[i]["course_id"]+`">Exportovat</a>
+											<a href="javascript:void(0);" class="dropdown-item share-course" data-course_id="`+data[i]["course_id"]+`">Sdílet</a>
+											<div class="dropdown-divider"></div>
+											<a href="javascript:void(0);" class="dropdown-item text-danger" data-course_id="`+data[i]["course_id"]+`" data-toggle="modal" data-target="#deleteCourseModal">Smazat</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>`);
+						var latest_item = $("#loader").find("li.list-group-item[data-course_id='"+data[i]["course_id"]+"']");
+						latest_item.find(".users-list-body h5").text(data[i]['name']);
+						latest_item.find(".users-list-body p").text(data[i]['description']);
+					}
+				} else {
+					for (var i = 0; i < data.length; i++) {
+						$("#loader").append(`
+						<li data-lecture_id="`+data[i]["lecture_id"]+`" class="list-group-item `+(("{{request.path}}" == "/admin/lectures/"+data[i]["lecture_id"])?"open-chat":"")+`">
+							<div class="users-list-body">
+								<div>
+									<h5></h5>
+									<p></p>
+								</div>
+								<div class="users-list-action">
+									<div class="new-message-count"></div>
+									<small class="text-muted"></small>
+									<div class="action-toggle">
+										<div class="dropdown">
+											<a data-toggle="dropdown">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a class="dropdown-item">Otevřít</a>
+												<a href="javascript:void(0);" class="dropdown-item edit-lecture" data-lecture_id="`+data[i]['lecture_id']+`" data-toggle="modal" data-target="#newLectureModal">Upravit</a>
+												<a href="javascript:void(0);" class="dropdown-item move-lecture-up" data-lecture_id="`+data[i]['lecture_id']+`">Posunout ↑</a>
+												<a href="javascript:void(0);" class="dropdown-item move-lecture-down" data-lecture_id="`+data[i]['lecture_id']+`">Posunout ↓</a>
+												<a href="javascript:void(0);" class="dropdown-item duplicate-lecture" data-lecture_id="`+data[i]['lecture_id']+`">Duplikovat</a>
+												<a href="javascript:void(0);" class="dropdown-item export-lecture" data-lecture_id="`+data[i]['lecture_id']+`">Exportovat</a>
+												<a href="javascript:void(0);" class="dropdown-item visualize-lecture" data-lecture_id="`+data[i]['lecture_id']+`">Vizualizace</a>
+												<div class="dropdown-divider"></div>
+												<a href="javascript:void(0);" class="dropdown-item text-danger" data-lecture_id="`+data[i]['lecture_id']+`" data-toggle="modal" data-target="#deleteLectureModal">Smazat</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>`);
+						var latest_item = $("#loader").find("li.list-group-item[data-lecture_id='"+data[i]["lecture_id"]+"']");
+						latest_item.find(".users-list-body h5").text(data[i]['name']);
+						latest_item.find(".users-list-body p").text(data[i]['description']);
+						latest_item.find(".users-list-action small.text-muted").text(data[i]['last_edited']);
+						latest_item.find(".users-list-action div.new-message-count").text(data[i]['steps_count']);
+					}
+				}
+
+				$("#loading").hide();
+			}
+		});
+	}
+
+	let timehandler = 0;
+	$(document).on('input', '#search', function() {
+		clearTimeout(timehandler);
+		timehandler = setTimeout(function() {
+			loadConversations($("#search").val(), 1);
+		}, 300);
+	});
+
+	var intersectionObserver = new IntersectionObserver(entries => {
+		if (entries[0].isIntersecting == false || entries[0]<0) {
+			return;
+		}
+		loadConversations($('#search').val());
+
+	});
+	intersectionObserver.observe(loadmore);
+
+	$(document).on('click', '.lecture-step', function(event) {
+		if (!$(event.target).is("button") && !$(event.target).hasClass("fa")) {
+			$(this).find("button.edit-step").first().trigger("click");
+			return false;
+		}
+
+		if ($(event.target).hasClass("fa") && ($(event.target).hasClass("fa-edit") || $(event.target).hasClass("fa-trash"))) {
+			$(event.target).closest("button").click();
+		}
+	});
+
+	$(document).on('click', '.lecture-step-answer', function(event) {
+		if (!$(event.target).is("button") && !$(event.target).hasClass("fa")) {
+			$(this).find("button.edit-answer").first().trigger("click");
+			return false;
+		}
+
+		if ($(event.target).hasClass("fa") && ($(event.target).hasClass("fa-edit") || $(event.target).hasClass("fa-trash"))) {
+			$(event.target).closest("button").click();
+		}
+	});
+
+	fixSortable();
+
+	$('#pause_date').bootstrapMaterialDatePicker({
+		format: 'DD.MM.YYYY HH:mm',
+		lang: "cs"
+	});
+
+	$('#pause_date').bootstrapMaterialDatePicker().on("open", function() {
+		let material_icons = $(".dtp-content").find("i.material-icons");
+
+		for (var i = 0; i < material_icons.length; i++) {
+			if ($(material_icons[i]).text() == "chevron_left") {
+				$(material_icons[i]).removeClass("material-icons");
+				$(material_icons[i]).addClass("fa fa-chevron-left");
+				$(material_icons[i]).text("");
+			} else {
+				$(material_icons[i]).removeClass("material-icons");
+				$(material_icons[i]).addClass("fa fa-chevron-right");
+				$(material_icons[i]).text("");
+			}
+		}
+	});
+
+	{% if course is defined %}
+		counter = "{{counter}}";
+		scrollIntoViewTillId("{{course.id}}");
+	{% endif %}
+
+	{% if request.args.get('lecture_id') != "" %}
+		counter = "{{counter}}";
+		scrollIntoViewTillId("{{request.args.get('lecture_id')}}");
+
+		$(".lecture-step-title").each(function() {
+			var contents2check = $(this).contents();
+			$(this).contents().each(function() {
+				if (this.nodeType === 3) {
+					if ($(this).text().trim() != "" && $(this).text().trim().length > 50) {
+						this.nodeValue=$(this).text().trim().substr(0, 50) + "... ";
+					}
+				}
+			});
+		});
+
+	{% endif %}
+});
+
+
+</script>
+
+{% endblock %}
