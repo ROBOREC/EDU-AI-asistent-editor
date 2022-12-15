@@ -1,0 +1,7 @@
+dateutils
+requests
+pymysql
+celery
+flower
+sqlalchemy
+phonenumbers

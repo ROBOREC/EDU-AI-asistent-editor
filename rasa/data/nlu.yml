@@ -1,0 +1,7 @@
+version: "2.0"
+nlu:
+  - intent: wdaadww
+    examples: |
+      - bb159b43c70ac9b392ef5ad8eb113ecaea9c37721c080498757f6d17b9e6091c
+      - c49c8413be9cd4afbe25fec11f5913a9ab157fc5958ff49afc9af5a416f9aa02
+      - cffbb9762540dd99829c1a5431250d2de822763fd919bc413e8b8a4eae5ed6c6

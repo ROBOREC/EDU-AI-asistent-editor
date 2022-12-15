@@ -1,0 +1,12 @@
+version: "2.0"
+
+rules:
+- rule: react to reminder
+  steps:
+  - intent: EXTERNAL_reminder
+  - action: action_quiz
+
+- rule: react to reminder 2
+  steps:
+  - intent: EXTERNAL_reminder
+  - action: action_quiz

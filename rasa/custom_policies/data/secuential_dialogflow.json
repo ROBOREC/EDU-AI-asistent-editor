@@ -1,0 +1,29 @@
+{
+  "scrum": [{
+      "topic_name": "product_backlog",
+      "explanation": {
+        "1": "utter_product_backlog",
+        "2": "utter_product_backlog_2",
+        "3": "utter_epica"
+      },
+      "examples": {
+        "1": "example del tema 1 1",
+        "2": "example del tema 1 2"
+      }
+    },
+    {
+    "topic_name": "sprint_planning",
+    "explanation": {
+      "1": "utter_scrum_master",
+      "2": "utter_sprint_backlog",
+      "3": "utter_diseño_backlog",
+      "4": "utter_user_story",
+      "5": "utter_tarea"
+    },
+    "examples": {
+      "1": "example del tema 2 1",
+      "2": "example del tema 2 2"
+    }
+    }
+  ]
+}

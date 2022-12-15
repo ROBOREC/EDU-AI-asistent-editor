@@ -1,0 +1,41 @@
+version: "2.0"
+
+intents:
+  - EXTERNAL_reminder
+
+responses:
+  utter_what_can_do:
+  - text: What can I do for you?
+  utter_goodbye:
+  - text: Bye
+
+actions:
+  - action_quiz
+  - action_show_courses
+
+slots:
+  own_answer:
+    type: any
+    influence_conversation: false
+  free_input_text:
+    type: any
+    influence_conversation: false
+  correct_answer:
+    type: any
+    influence_conversation: false
+  lecture_question:
+    type: any
+    influence_conversation: false
+  lecture_step:
+    type: any
+    influence_conversation: false
+  lecture_answer:
+    type: any
+    influence_conversation: false
+  lecture_answer_tryout:
+    type: any
+    influence_conversation: false
+
+session_config:
+  session_expiration_time: 0
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,5 @@
+pymysql
+celery
+redis
+flower
+phonenumbers

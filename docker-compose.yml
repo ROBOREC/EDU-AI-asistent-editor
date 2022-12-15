@@ -1,0 +1,87 @@
+version: '3.0'
+
+services:
+
+  flask:
+    build:
+      context: ./flask
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./flask:/app
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    # workers = cpu_count * 2 + 1
+    command: python3 run.py
+    #command: gunicorn -w 8 -b :8080 app:app --reload
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: edu
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  rasa:
+    build:
+      context: ./rasa/
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./rasa:/app
+    env_file:
+      - .env
+    command:
+      - run
+      - --cors
+      - "*"
+      - --enable-api
+    restart: on-failure
+
+  action_server:
+    build:
+      context: ./rasa/actions
+    volumes:
+      - ./rasa/actions:/app/actions
+    env_file:
+      - .env
+    ports:
+      - "5055:5055"
+    restart: always
+
+  worker:
+    build:
+      context: ./rasa/actions
+      dockerfile: Dockerfile-celery
+    env_file:
+      - .env
+    volumes:
+      - ./rasa/actions:/app
+    command: celery -A celery_app.celery worker -l debug -c 4 -Ofair --uid=nobody --gid=nogroup
+    depends_on:
+      - rabbit
+
+  monitor:
+    image: mher/flower
+    ports:
+      - "5555:5555"
+    command: celery --broker=rabbit flower --port=5555
+    depends_on:
+      - rabbit
+
+  rabbit:
+    image: rabbitmq:latest
+    ports:
+      - "5672"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8082:8080"
