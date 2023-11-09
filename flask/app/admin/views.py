@@ -118,7 +118,6 @@ def import_course_from_data(course_data):
 
 
 def get_lecture_data(_lecture, data2rewrite=None, rewrite_lectures=False):
-
     if data2rewrite is None:
         data2rewrite = {}
 
@@ -463,7 +462,6 @@ def courses():
 @admin.route("/courses/new", methods=["GET", "POST"])
 @login_required
 def course_new():
-
     try:
         data = request.get_json(silent=True)
 
@@ -511,7 +509,6 @@ def course_new():
 @admin.route("/courses/<course_id>", methods=["GET", "POST"])
 @login_required
 def course_detail(course_id):
-
     course2show = (
         Course.query.filter_by(user_id=current_user.id).filter_by(id=course_id).first()
     )
@@ -569,7 +566,6 @@ def course_share(course_id):
 @admin.route("/ajax/courses/<int:course_id>", methods=["GET", "POST"])
 @login_required
 def courses_ajax_detail(course_id):
-
     course = (
         Course.query.filter_by(user_id=current_user.id).filter_by(id=course_id).first()
     )
@@ -590,7 +586,6 @@ def courses_ajax_detail(course_id):
 @admin.route("/courses/<course_id>/delete", methods=["GET", "POST"])
 @login_required
 def course_delete(course_id):
-
     msg = ""
     try:
         course = (
@@ -611,7 +606,6 @@ def course_delete(course_id):
 @login_required
 def course_import(**kwargs):
     try:
-
         try:
             course_data = request.get_json(force=True)
         except:
@@ -635,7 +629,6 @@ def course_import(**kwargs):
 @login_required
 def lecture_import(course_id, **kwargs):
     try:
-
         try:
             data = request.get_json(force=True)
         except:
@@ -665,7 +658,6 @@ def lecture_import(course_id, **kwargs):
 @admin.route("/courses/<course_id>/export", methods=["GET", "POST"])
 @login_required
 def course_export(course_id, **kwargs):
-
     try:
         _course = (
             Course.query.filter_by(user_id=current_user.id)
@@ -690,7 +682,6 @@ def course_export(course_id, **kwargs):
 @admin.route("/ajax/courses", methods=["GET", "POST"])
 @login_required
 def courses_ajax():
-
     page = request.args.get("p", 1, type=int)
     search = request.args.get("s", "")
 
@@ -731,7 +722,6 @@ def courses_ajax():
 @admin.route("/ajax/courses/dropdown", methods=["GET", "POST"])
 @login_required
 def courses_ajax_dropdown():
-
     try:
         _courses = (
             Course.query.filter_by(user_id=current_user.id).order_by(Course.id).all()
@@ -828,7 +818,6 @@ def lecture2steps_ajax_dropdown(lecture_id, **kwargs):
 @admin.route("/ajax/lectures", methods=["GET", "POST"])
 @login_required
 def lectures_ajax():
-
     page = request.args.get("p", 1, type=int)
     search = request.args.get("s", "")
     course_id = request.args.get("course_id", 0, type=int)
@@ -879,7 +868,6 @@ def lectures_ajax():
 @admin.route("/lectures/new", methods=["GET", "POST"])
 @login_required
 def lecture_new(**kwargs):
-
     try:
         data = request.get_json(silent=True)
 
@@ -926,7 +914,6 @@ def lecture_new(**kwargs):
 @admin.route("/ajax/lecture/<lecture_id>", methods=["GET", "POST"])
 @login_required
 def lecture_ajax_detail(lecture_id):
-
     try:
         lecture = Lecture.query.get(lecture_id)
 
@@ -991,7 +978,6 @@ def lecture_ajax_detail(lecture_id):
 @admin.route("/lectures/<lecture_id>/visualize", methods=["GET", "POST"])
 @login_required
 def lecture_visualize(lecture_id):
-
     lecture2show = Lecture.query.get(lecture_id)
     course2show = (
         Course.query.filter_by(user_id=current_user.id)
@@ -1009,7 +995,6 @@ def lecture_visualize(lecture_id):
 @admin.route("/lectures/<lecture_id>/duplicate", methods=["GET", "POST"])
 @login_required
 def lecture_duplicate(lecture_id):
-
     try:
         _lecture = Lecture.query.get(lecture_id)
 
@@ -1048,7 +1033,6 @@ def lecture_duplicate(lecture_id):
 @admin.route("/lectures/<lecture_id>/export", methods=["GET", "POST"])
 @login_required
 def lecture_export(lecture_id):
-
     try:
         _lecture = Lecture.query.get(lecture_id)
 
@@ -1073,7 +1057,6 @@ def lecture_export(lecture_id):
 @admin.route("/lectures/<lecture_id>/delete", methods=["GET", "POST"])
 @login_required
 def lecture_delete(lecture_id, **kwargs):
-
     try:
         lecture = Lecture.query.get(lecture_id)
 
@@ -1106,7 +1089,6 @@ def lecture_delete(lecture_id, **kwargs):
 @admin.route("/lectures/<lecture_id>/move-up", methods=["GET", "POST"])
 @login_required
 def lecture_move_up(lecture_id, **kwargs):
-
     try:
         lecture = Lecture.query.get(lecture_id)
 
@@ -1155,7 +1137,6 @@ def lecture_move_up(lecture_id, **kwargs):
 @admin.route("/lectures/<lecture_id>/move-down", methods=["GET", "POST"])
 @login_required
 def lecture_move_down(lecture_id):
-
     try:
         lecture = Lecture.query.get(lecture_id)
         course2show = (
@@ -1208,7 +1189,6 @@ def lecture_move_down(lecture_id):
 @admin.route("/steps/new", methods=["GET", "POST"])
 @login_required
 def steps_new():
-
     try:
         data = request.get_json(silent=True)
         lecture_id = data.get("lecture_id") if data.get("lecture_id") != "" else None
@@ -1296,7 +1276,6 @@ def steps_new():
 @admin.route("/ajax/steps/<step_id>/duplicate", methods=["GET", "POST"])
 @login_required
 def step_duplicate(step_id):
-
     try:
         step2update = Step.query.filter_by(id=step_id).first()
         if step2update:
@@ -1382,7 +1361,6 @@ def step_duplicate(step_id):
 @admin.route("/ajax/steps/<step_id>", methods=["GET", "POST"])
 @login_required
 def step_detail(step_id):
-
     try:
         step = Step.query.get(step_id)
         data2send = []
@@ -1440,7 +1418,6 @@ def step_delete(step_id):
 @admin.route("/ajax/steps/reorder", methods=["GET", "POST"])
 @login_required
 def reorder_steps():
-
     try:
         data = request.get_json(silent=True)
         sort = data.get("sort", [])
@@ -1472,7 +1449,6 @@ def reorder_steps():
 @admin.route("/ajax/answers/new", methods=["GET", "POST"])
 @login_required
 def answer_new():
-
     try:
         data = request.get_json(silent=True)
 
@@ -1553,7 +1529,6 @@ def answer_new():
 @admin.route("/ajax/answers/<answer_id>", methods=["GET", "POST"])
 @login_required
 def answer_detail(answer_id):
-
     try:
         answer = Answer.query.get(answer_id)
         step = Step.query.get(answer.step_id)
@@ -1593,7 +1568,6 @@ def answer_detail(answer_id):
 @admin.route("/ajax/answers/<answer_id>/delete", methods=["GET", "POST"])
 @login_required
 def answer_delete(answer_id):
-
     try:
         answer = Answer.query.get(answer_id)
         db.session.delete(answer)
@@ -1606,7 +1580,6 @@ def answer_delete(answer_id):
 @admin.route("/ajax/answers/reorder", methods=["GET", "POST"])
 @login_required
 def answer_reorder():
-
     try:
         data = request.get_json(silent=True)
         sort = data.get("sort", [])
@@ -1706,7 +1679,6 @@ def remove_images():
         target_id = data.get("target_id", "")
 
         if filename != "":
-
             if target_type != "" and target_id != "":
                 if target_type == "step":
                     obj2replace = (

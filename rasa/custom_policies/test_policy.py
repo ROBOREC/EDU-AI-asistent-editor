@@ -128,7 +128,6 @@ class TestPolicy(Policy):
         interpreter: NaturalLanguageInterpreter,
         **kwargs: Any,
     ) -> PolicyPrediction:
-
         if tracker.latest_message.text == "/restart":
             return self._prediction(
                 confidence_scores_for("action_restart", 1.0, domain)

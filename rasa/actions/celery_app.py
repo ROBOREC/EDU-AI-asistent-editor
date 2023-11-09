@@ -48,7 +48,6 @@ def get_db_row(sql, parameters):
 
 @celery.task(name="actions.celery_app.trigger_intent", bind=True)
 def trigger_intent(self, data):
-
     requests.post(
         f"""{os.getenv('RASA_URL', '')}/conversations/{data["sender_id"]}/trigger_intent?output_channel=latest""",
         headers={"Content-Type": "application/json"},

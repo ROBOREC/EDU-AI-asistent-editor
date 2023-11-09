@@ -30,7 +30,6 @@ def get_next_item(item2find, list2search):
 
 
 def get_slots(sender_id):
-
     tmp_query = get_db_all(
         "select * from events_slots where sender_id = %s", [sender_id]
     )
@@ -271,7 +270,7 @@ class ActionQuiz(Action):
             ...
 
         if latest_message.lower() in ["reset", "restart"] and not resetted:
-            dispatcher.utter_message(text=translate_text("edu.reset"))
+            dispatcher.utter_message(text=translate_text("Resetováno"))
             reset_all_slots(sender_id)
             reset_all_tasks(sender_id)
             trigger_intent_quiz(sender_id, 1)
@@ -337,7 +336,9 @@ class ActionQuiz(Action):
                 return [FollowupAction("action_listen")]
             except Exception as e:
                 print(e)
-                dispatcher.utter_message(text=f"edu.mff_unavailable")
+                dispatcher.utter_message(
+                    text=f"Omlouvám se, část mozku mi právě nefunguje."
+                )
 
         if "/e" in latest_message.lower() and len(latest_message) > 2 and command == "":
             message2send = latest_message.split("/e")[1].strip()
@@ -433,7 +434,6 @@ class ActionQuiz(Action):
             return [FollowupAction("action_quiz")]
 
         elif step["response_type"] == "question":
-
             answers = get_db_all(
                 "select * from lectures_answers where step_id = %s and parent_id = 0 order by position",
                 [step["id"]],
@@ -443,7 +443,6 @@ class ActionQuiz(Action):
             )
 
             if being_asked == "":
-
                 buttons = []
                 for answer in answers:
                     buttons.append(
@@ -493,7 +492,6 @@ class ActionQuiz(Action):
                     FollowupAction("action_listen"),
                 ]
             else:
-
                 if str(step["free_input"]) != "1" and empty_text2match is True:
                     latest_message = ""
 
@@ -631,7 +629,6 @@ class ActionQuiz(Action):
                     elif selected_answer["following_action"] == "again":
                         ...
                     elif selected_answer["following_action"] == "lecture":
-
                         _lecture = get_db_row(
                             "select * from lectures where id = %s order by id limit 1",
                             [selected_answer["following_action_id"]],
@@ -651,7 +648,6 @@ class ActionQuiz(Action):
                         set_slot(sender_id, "number_tries", "")
 
                     elif selected_answer["following_action"] == "course":
-
                         _course = get_db_row(
                             "select * from courses where id = %s order by id limit 1",
                             [selected_answer["following_action_id"]],
@@ -685,7 +681,9 @@ class ActionQuiz(Action):
 
                         dispatcher.utter_message(mffcuni.json().get("a", ""))
                     except:
-                        dispatcher.utter_message("edu.mff_unavailable")
+                        dispatcher.utter_message(
+                            "Omlouvám se, část mozku mi právě nefunguje."
+                        )
 
                     set_slot(sender_id, "being_asked", "")
                     set_slot(sender_id, "number_tries", number_tries)

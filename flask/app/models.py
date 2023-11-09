@@ -13,7 +13,6 @@ def load_user(user_id):
 
 
 class User(db.Model, UserMixin):
-
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -62,7 +61,6 @@ class User(db.Model, UserMixin):
 
 
 class Event(db.Model):
-
     __tablename__ = "events"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -75,7 +73,6 @@ class Event(db.Model):
 
 
 class Lecture(db.Model):
-
     __tablename__ = "lectures"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -100,7 +97,6 @@ class Lecture(db.Model):
 
 
 class Course(db.Model):
-
     __tablename__ = "courses"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -123,7 +119,6 @@ class Course(db.Model):
 
 
 class Step(db.Model):
-
     __tablename__ = "lectures_steps"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -159,7 +154,6 @@ class Step(db.Model):
 
 
 class Answer(db.Model):
-
     __tablename__ = "lectures_answers"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -192,7 +186,6 @@ class Answer(db.Model):
 
 
 class EventsSlot(db.Model):
-
     __tablename__ = "events_slots"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -206,7 +199,6 @@ class EventsSlot(db.Model):
 
 
 class PlannedTask(db.Model):
-
     __tablename__ = "planned_tasks"
 
     id = db.Column(db.Integer, primary_key=True)

@@ -132,7 +132,6 @@ def share_webchat(hash):
 
 @public.route("/register", methods=["GET", "POST"])
 def register():
-
     if os.getenv("ALLOW_REGISTER") != "1":
         flash("Registrace není povolena!", "warning")
         return redirect(url_for("public.login"))
@@ -154,7 +153,6 @@ def register():
 
 @public.route("/reset-password", methods=["GET", "POST"])
 def reset_password():
-
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
